@@ -1,18 +1,25 @@
 {
-  "name": "acxiom-crm-root",
+  "name": "fraudgraph-ai",
   "version": "1.0.0",
-  "description": "AcxiomCRM - Production-Ready Role-Based MERN CRM Application",
+  "description": "Adaptive Financial Fraud Detection Under Concept Drift with Graph Analytics & Model Uncertainty",
   "scripts": {
-    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "backend": "cd backend && npm start",
-    "backend:dev": "cd backend && npm run dev",
-    "backend:seed": "cd backend && npm run seed",
-    "frontend": "cd frontend && npm run dev",
-    "frontend:build": "cd frontend && npm run build",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "test:backend": "cd backend && mvn test",
+    "start:backend": "cd backend && mvn spring-boot:run",
+    "start": "./start.sh",
+    "ml:benchmark": "python3 ml-research/generate_synthetic_dataset.py && python3 ml-research/train_adaptive_model.py && python3 ml-research/concept_drift_experiment.py"
   },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
+  "keywords": [
+    "fintech",
+    "fraud-detection",
+    "concept-drift",
+    "graph-analytics",
+    "spring-boot",
+    "react",
+    "recharts",
+    "machine-learning"
+  ],
+  "author": "FraudGraph AI Team",
+  "license": "MIT"
 }

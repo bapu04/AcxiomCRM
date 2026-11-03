@@ -1,292 +1,336 @@
-# AcxiomCRM — Enterprise Role-Based CRM Application
+# FraudGraph AI — Adaptive Financial Fraud Detection Under Concept Drift
 
+[![Java](https://img.shields.io/badge/Java-17%20LTS-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Security](https://img.shields.io/badge/Spring%20Security-6.3-6DB33F?logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.19-000000?logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose%208-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Recharts](https://img.shields.io/badge/Recharts-2.12-22c55e)](https://recharts.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Repository:** [https://github.com/bapu04/AcxiomCRM](https://github.com/bapu04/AcxiomCRM)  
-> **AcxiomCRM** is a production-grade, full-stack MERN (MongoDB, Express, React, Node.js) Customer Relationship Management system built to enterprise specifications. It features strict **Role-Based Access Control (RBAC)**, server-enforced business validation rules, an **append-only tamper-evident audit trail**, an interactive **Chart.js analytics dashboard**, **1-click lead-to-opportunity conversion**, and a **customizable Dark/Light theme**.
+> **FraudGraph AI** is a real-time FinTech transaction-monitoring platform designed to detect complex financial fraud topologies and explain risk indicators under **adversarial concept drift**. It combines **graph network analytics**, **behavioral deviation profiling**, and **model epistemic uncertainty** to prioritize human investigations and mitigate financial crime.
 
 ---
 
 ## 📑 Table of Contents
-- [Key Features](#-key-features)
+- [Executive Overview](#-executive-overview)
+- [Novelty Directions](#-novelty-directions)
 - [System Architecture](#-system-architecture)
-- [Pre-Configured Demo Accounts](#-pre-configured-demo-accounts)
-- [Screenshots & UI Walkthrough](#-ui-highlights)
-- [Project Structure](#-project-structure)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Mathematical & Algorithmic Formulations](#-mathematical--algorithmic-formulations)
 - [Getting Started & Installation](#-getting-started--installation)
-- [Environment Configuration](#-environment-configuration)
+- [Pre-Configured Demo Accounts](#-pre-configured-demo-accounts)
 - [REST API Reference](#-rest-api-reference)
-- [Business Rules & Validation](#-business-rules--validation)
-- [Security & Audit Logging](#-security--audit-logging)
-- [License](#-license)
+- [ML Research & Synthetic Dataset](#-ml-research--synthetic-dataset)
+- [Compliance & Ethical Safeguards](#-compliance--ethical-safeguards)
 
 ---
 
-## 🚀 Key Features
+## 💡 Executive Overview
+Traditional anti-fraud systems rely on static rule thresholds (e.g. `amount > $10,000`) or stationary supervised classifiers. These systems fail when confronted with:
+1. **Coordinated Mule Rings:** Fraudsters distribute funds across decentralized networks to evade single-entity monitoring.
+2. **Concept Drift:** Fraudsters rapidly shift typologies (e.g., from high-value wires to high-frequency micro-payments).
+3. **Investigation Fatigue:** High false-positive rates overwhelm compliance officers.
 
-### 1. 🛡️ Role-Based Access Control (RBAC)
-- **Administrator (`Admin`):** Unrestricted access. Full CRUD across all modules, account creation/editing, role management, temporary lockout release, system reports, and immutable audit logs.
-- **Sales Manager (`Manager`):** Team-wide visibility. Full oversight over customer accounts, leads, deals pipeline, team follow-ups, and sales conversion metrics.
-- **Sales Executive (`SalesExecutive`):** Scoped visibility. Strictly constrained to customer accounts, leads, opportunities, and activities explicitly assigned to their user ID.
+**FraudGraph AI** resolves these limitations through a hybrid architecture:
+- **Transaction Relationships (Graph Analytics):** Identifies circular layering loops ($A \to B \to C \to A$) and accumulator mule clusters in real time.
+- **Behavioral Changes:** Dynamically computes velocity bursts and spend $Z$-scores against account baselines.
+- **Model Uncertainty:** Quantifies epistemic ambiguity near decision thresholds ($U = 1.0 - 2|P - 0.5|$) to prioritize high-value investigations for **Active Learning**.
+- **Explainable AI (XAI):** Generates transparent, factor-by-factor risk breakdowns for compliance investigators.
 
-### 2. ☀️ Segmented Dark & Light Theme Switcher
-- Fast, accessible segmented pill toggle (`☀️ Light` / `🌙 Dark`) on every navigation bar and landing page.
-- Synchronized with `document.documentElement`, `body`, CSS `color-scheme`, and persistent in `localStorage`.
-- Zero Flash of Unstyled Content (FOUC) via synchronous pre-hydration header injection.
+---
 
-### 3. 🌐 Modern SaaS Landing Page
-- Modern marketing front-page with hero section, live KPI metrics preview, role-based interactive showcase tabs, enterprise feature highlights, and direct authentication entry points.
+## 🌟 Novelty Directions
 
-### 4. 👥 Customer Management
-- Complete Customer Master Directory with paginated tables, search by name/email/phone/company, and status filters.
-- Strict duplicate-checking: Prevents duplicate email and phone registrations.
-- Activity history and relationship mapping for each account.
+```
+                       ┌─────────────────────────┐
+                       │   Incoming Transaction  │
+                       └────────────┬────────────┘
+                                    │
+         ┌──────────────────────────┼──────────────────────────┐
+         ▼                          ▼                          ▼
+┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
+│  Graph Topology  │      │ Behavioral Drift │      │ Concept Drift    │
+│  Analytics       │      │ Profiling        │      │ Detection        │
+├──────────────────┤      ├──────────────────┤      ├──────────────────┤
+│ • Cyclic Loops   │      │ • Velocity burst │      │ • Sliding window │
+│ • Mule Fan-In    │      │ • Amount Z-score │      │   Page-Hinkley   │
+│ • Mule Fan-Out   │      │ • Channel shift  │      │ • Baseline shift │
+└────────┬─────────┘      └────────┬─────────┘      └────────┬─────────┘
+         │                         │                         │
+         └─────────────────────────┼─────────────────────────┘
+                                   ▼
+                   ┌───────────────────────────────┐
+                   │ Adaptive Fraud Scoring Engine │
+                   │  - Multi-factor Fusion        │
+                   │  - Epistemic Uncertainty (U)  │
+                   │  - Explainable AI (XAI) JSON  │
+                   └───────────────┬───────────────┘
+                                   │
+         ┌─────────────────────────┴─────────────────────────┐
+         ▼                                                   ▼
+┌──────────────────────────────┐            ┌──────────────────────────────┐
+│ Quadrant 1: High Risk/Low U  │            │ Quadrant 2: High Risk/High U │
+│ ➔ Autonomous Block           │            │ ➔ Priority Investigator Case │
+└──────────────────────────────┘            └──────────────────────────────┘
+```
 
-### 5. 🎯 Lead Management & 1-Click Conversion
-- Inbound lead capture with source tracking (Website, Referral, Cold Outreach, Campaign, Partner).
-- Lifecycle status tracking: `New` ➔ `Contacted` ➔ `Qualified` ➔ `Unqualified` ➔ `Converted` ➔ `Lost`.
-- **One-Click Lead Conversion Modal:** Automatically converts qualified prospects into master Customer records and opens new Opportunity deals in a single atomic transaction.
-
-### 6. 💼 Opportunity Pipeline & Forecasting
-- 5 pipeline stages: `Qualification` (20%), `Proposal` (40%), `Negotiation` (70%), `Won` (100%), and `Lost` (0%).
-- Real-time **Weighted Pipeline Value** calculation: `Amount × (Probability / 100)`.
-- Server-side business constraints: Amount must be `> 0`, probability `0–100%`, and expected close dates cannot be set in the past for open opportunities.
-
-### 7. 📅 Follow-Up Coordination & Reminders
-- Schedule customer and lead touchpoints (Calls, Meetings, Emails, Demos).
-- Categorized status filters: `Planned`, `Completed`, `Missed`, and `Cancelled`.
-- Filter views for `Today`, `Upcoming`, and `Overdue` tasks.
-- Prevents scheduling new follow-up tasks earlier than the current date.
-
-### 8. 📊 Analytics Dashboard & Reporting
-- Real-time KPI summary widgets (Total Customers, Total Leads, Pipeline Value, Pending Follow-ups, Deal Win Rate).
-- **Chart.js** data visualizations: *Opportunity Pipeline by Stage* (Bar Chart) and *Lead Status Breakdown* (Doughnut Chart).
-- Comprehensive exportable report views: Pipeline Breakdown, Conversion Rates, and Representative Activity Logs.
-
-### 9. 🔒 Immutable Audit Logging & Account Security
-- Tamper-proof, append-only security and business audit log tracking every `LOGIN`, `FAILED_LOGIN`, `LOGOUT`, `CREATE`, `UPDATE`, `DELETE`, and `ROLE_CHANGE`.
-- Built-in **JSON Payload Inspector** allowing administrators to view `oldValue` vs. `newValue` diffs.
-- Automatic **Account Lockout**: 5 consecutive failed login attempts trigger an automatic 15-minute lockout (with manual Admin unlock override).
+1. **Transaction Relationships (Graph Topology Engine):**
+   - In-memory sliding-window directed multigraph.
+   - Depth-bounded DFS cycle detection ($depth \le 4$) detecting smurfing & layering loops.
+   - Bipartite and network degree analysis flagging accumulator mules (Fan-In $\ge 3$) and disperser mules (Fan-Out $\ge 3$).
+2. **Behavioral Profiling & Velocity Drift:**
+   - Real-time sliding window velocity counters (transactions per 10 minutes vs. historical hourly baselines).
+   - Dynamic spend $Z$-score: $Z = \frac{\text{Amount} - \mu}{\sigma}$.
+3. **Model Epistemic Uncertainty & Active Learning Prioritization:**
+   - Instead of a naive binary risk score, each transaction computes both **Fraud Probability ($P$)** and **Uncertainty ($U$)**.
+   - Cases are prioritized via:
+     $$\text{Priority} = 0.6 \cdot \text{RiskScore} + 40.0 \cdot \text{Uncertainty}$$
+   - This prioritizes boundary and drifted cases for human review, enabling rapid active learning retraining!
+4. **Explainable AI (XAI) Attribution:**
+   - Every flagged transaction produces an immutable JSON attribution list of contributing factors, severity ratings, and delta impact points for auditors.
 
 ---
 
 ## 🏛️ System Architecture
 
-AcxiomCRM adopts a multi-tiered, enterprise software architecture:
+FraudGraph AI is built as a multi-tier, enterprise-grade FinTech application:
 
 ```
-[ Clients / Browsers ]
-         │
-         ▼
-[ Presentation Layer: Vite + React 18 + TailwindCSS + Lucide Icons ]
-         │ (HTTP REST / Axios with JWT Interceptor)
-         ▼
-[ Application Layer: Express.js REST API + Route Authentication & Scoping Middleware ]
-         │
-         ▼
-[ Domain Layer: Business Validation, Lifecycle Workflows, Weighted Pipeline Math ]
-         │
-         ▼
-[ Data Access Layer: Mongoose ODM + Schema Validation + Security Hooks ]
-         │
-         ▼
-[ Database Layer: MongoDB (Local / Atlas / Auto In-Memory Fallback) ]
-```
-
----
-
-## 🔑 Pre-Configured Demo Accounts
-
-On initial launch, the backend seeder automatically initializes three demo user accounts:
-
-| Role | Email Address | Password | Permissions & Scope |
-| :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@acxiomcrm.com` | `Admin@12345` | Full CRM Admin, User CRUD, Lockout Control, Audit Logs |
-| **Sales Manager** | `manager@acxiomcrm.com` | `Manager@12345` | Team Pipeline Oversight, Leads, Deals, Reports |
-| **Sales Executive** | `sales@acxiomcrm.com` | `Sales@12345` | Assigned Customers, Leads, Follow-ups, Activities |
-
-> 💡 **Quick Login:** The Login screen includes one-click demo fill buttons to instantly test any of these roles without typing.
-
----
-
-## 📂 Project Structure
-
-```
-AcxiomCRM/
-├── .gitignore                        # Comprehensive root gitignore
-├── package.json                      # Monorepo orchestration scripts
-├── README.md                         # Project documentation
-├── backend/
-│   ├── .env.example                  # Environment configuration template
-│   ├── package.json
-│   └── src/
-│       ├── config/
-│       │   └── db.js                 # MongoDB connection with In-Memory fallback
-│       ├── controllers/              # Business controllers (Auth, Customers, Leads, etc.)
-│       ├── middleware/               # Auth, RBAC, Validation & Error Handlers
-│       ├── models/                   # Mongoose schemas (User, Customer, Lead, Opportunity, AuditLog)
-│       ├── routes/                   # Express REST API routes
-│       ├── seeds/
-│       │   └── seed.js               # Sample data seeding script
-│       ├── services/
-│       │   └── auditService.js       # Centralized audit logging service
-│       ├── app.js                    # Express application configuration
-│       └── server.js                 # HTTP server bootstrap
-└── frontend/
-    ├── index.html                    # HTML root with pre-hydration theme script
-    ├── package.json
-    ├── postcss.config.js
-    ├── tailwind.config.js
-    ├── vite.config.js                # Vite configuration with /api reverse proxy
-    └── src/
-        ├── api/
-        │   └── axiosClient.js        # Axios instance with Bearer token interceptor
-        ├── components/               # Navbar, Sidebar, StatCard, Pagination, ConfirmModal
-        ├── context/
-        │   ├── AuthContext.jsx       # Authentication state provider
-        │   └── ThemeContext.jsx      # Light/Dark theme provider & ThemeToggle
-        └── pages/
-            ├── LandingPage.jsx       # Public marketing SaaS landing page
-            ├── Login.jsx             # Login with lockout notifications & quick fill
-            ├── Register.jsx          # User registration
-            ├── Dashboard.jsx         # Executive KPI summary & Chart.js charts
-            ├── Customers.jsx         # Customer directory & contact management
-            ├── Leads.jsx             # Lead qualification & 1-click conversion
-            ├── Opportunities.jsx     # Deal stages, probability, weighted values
-            ├── FollowUps.jsx         # Touchpoint scheduling & overdue reminders
-            ├── Reports.jsx           # Sales conversion & pipeline reports
-            ├── Users.jsx             # Admin user administration & lockout control
-            └── AuditLogs.jsx         # Append-only security audit trail & JSON inspector
+[ Web Browser / Investigator Terminal ]
+                   │ (HTTP / REST / Axios with JWT)
+                   ▼
+┌────────────────────────────────────────────────────────┐
+│ Presentation: Vite + React 18 + TailwindCSS + Recharts │
+│  - Real-time Live Ingestion Stream Feed                │
+│  - Interactive SVG FraudGraph Topology Visualizer      │
+│  - Executive KPI Analytics Dashboard                   │
+│  - Prioritized Investigation & Resolution Drawer       │
+│  - Attack Simulation & Concept Drift Workbench         │
+└──────────────────────────┬─────────────────────────────┘
+                           │ (REST API / JSON / Port 8080)
+                           ▼
+┌────────────────────────────────────────────────────────┐
+│ Backend: Java 17 + Spring Boot 3.3.4 + Spring Security │
+│  - Stateless JWT Authentication Filter                 │
+│  - GraphAnalyticsEngine (Cycle & Mule Detection)       │
+│  - BehavioralProfilingEngine (Velocity & Z-Scores)     │
+│  - ConceptDriftDetector (Statistical Distance Tracker) │
+│  - UncertaintyEstimator (Epistemic Margin Calculus)    │
+│  - StreamingSimulatorService (Synthetic Data Feeder)   │
+└──────────────────────────┬─────────────────────────────┘
+                           │ (Spring Data JPA / Hibernate)
+                           ▼
+┌────────────────────────────────────────────────────────┐
+│ Persistence Layer: MySQL 8 (H2 in-memory dev fallback) │
+│  - users, accounts, transactions, fraud_alerts,        │
+│    concept_drift_reports                               │
+└────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛠️ Getting Started & Installation
+## 🚀 Key Features
+
+### 1. 📊 Executive Fraud Intelligence Dashboard
+- Real-time KPI summary widgets (Monitored Volume, Flagged Fraud Rate %, Concept Drift Index, Detection Latency).
+- **Recharts** interactive data visualizations:
+  - *Streaming Transaction Velocity & Risk Density* (Area chart).
+  - *Investigation Priority Queue Breakdown* (Bar chart).
+  - *Adaptive Concept Drift Tracker* (Line chart with dynamic threshold reference).
+  - *Uncertainty Decision Matrix* (Interactive 4-quadrant display).
+
+### 2. ⚡ Live Transaction Stream & Ingestion Monitor
+- Real-time transaction feed with sub-second scoring updates.
+- Real-time status badges (`APPROVED`, `UNDER_REVIEW`, `BLOCKED`).
+- Multidimensional filtering by Status, Search Keyword, and Min Risk Score threshold.
+- 1-click synthetic transaction injection button for live testing.
+
+### 3. 🕸️ FraudGraph Topology & Mule Ring Visualizer
+- Interactive SVG network graph displaying account nodes and transaction flow vectors.
+- Dynamic detection of **circular money laundering loops** highlighted in glowing red.
+- Detection of **accumulator mules** (Fan-In) and **disperser mules** (Fan-Out) marked in warning amber.
+- Account inspector drawer displaying in-degree, out-degree, and risk contagion status.
+
+### 4. 🚨 Case Management & Explainable AI (XAI) Modal
+- Priority-ranked investigation queue fusing risk severity with model uncertainty.
+- XAI Waterfall displaying factor attribution (+35 pts Circular Cycle, +30 pts Velocity Burst, etc.).
+- Complete case resolution lifecycle: `OPEN`, `INVESTIGATING`, `CONFIRMED_FRAUD`, `FALSE_POSITIVE`, `DISMISSED`.
+- Immutable append-only audit trail with investigator timestamped notes.
+
+### 5. 🧪 Attack Simulation & Concept Drift Lab
+- Interactive simulator to stress-test the detection pipeline against real-world FinTech attacks:
+  - **Circular Mule Ring Attack:** Injects 3-way circular layering loops.
+  - **Velocity Burst Smurfing:** Floods 6 transfers in under 10 seconds.
+  - **Concept Drift Shift:** Injects sudden high-value transfer drift ($9k - $25k).
+  - **Benign Baseline Stream:** Generates standard retail consumer transactions.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | React 18, Vite 5, Tailwind CSS 3, Recharts 2.12, Lucide Icons, Axios |
+| **Backend** | Java 17 LTS, Spring Boot 3.3.4, Spring Security 6, JJWT 0.12.6, Spring Data JPA, Hibernate |
+| **Database** | MySQL 8 (Production profile) / H2 in-memory (Default dev profile) |
+| **Security** | Stateless JWT Authentication, BCrypt password hashing, Role-Based Access Control |
+| **AI / ML Research** | Python 3, scikit-learn, Cost-Sensitive Learning, ADWIN Drift Modeling |
+| **Development** | VS Code, Maven 3.9, Git, GitHub |
+
+---
+
+## 🧮 Mathematical & Algorithmic Formulations
+
+### 1. Spend Deviation $Z$-Score
+$$Z = \frac{\text{Amount} - \mu_{\text{baseline}}}{\sigma_{\text{baseline}}}$$
+When $Z > 3.0$, the transaction is classified as an anomalous spend deviation ($p < 0.0013$).
+
+### 2. Model Epistemic Uncertainty Formulation
+$$U = \max\left(0.02, \min\left(0.98, \left(1.0 - 2 \cdot |P - 0.5|\right) \cdot 0.55 + \delta_{\text{conflict}} + 0.25 \cdot D_{\text{drift}}\right)\right)$$
+- When $P = 0.50$ (decision boundary), uncertainty reaches maximum.
+- Conflicting signals (e.g. benign behavioral spend but participation in a cyclic graph loop) add a dissonance penalty $\delta_{\text{conflict}} = 0.20$.
+- Concept drift increases epistemic uncertainty by $0.25 \cdot D_{\text{drift}}$.
+
+### 3. Case Prioritization Score
+$$\text{PriorityScore} = 0.60 \cdot \text{RiskScore} + 40.0 \cdot U$$
+Ensures investigators prioritize transactions that are both high-risk and near the model's ambiguity boundary for **Active Learning**.
+
+---
+
+## 🏁 Getting Started & Installation
 
 ### Prerequisites
-- **Node.js**: v18.0.0 or higher
-- **npm**: v9.0.0 or higher
-- **MongoDB**: *(Optional)* MongoDB running locally on port 27017 or a MongoDB Atlas URI.  
-  *Note: If local MongoDB is not detected, AcxiomCRM will automatically launch an **In-Memory MongoDB** instance for immediate, zero-configuration testing!*
+- **Java 17 LTS** or higher
+- **Node.js 18+** and **npm**
+- **Maven 3.8+** (or use system maven)
+- *(Optional)* **MySQL 8.0+** (if running against local MySQL)
 
-### 1. Clone the Repository
+---
+
+### Step 1: Clone Repository
 ```bash
 git clone https://github.com/bapu04/AcxiomCRM.git
 cd AcxiomCRM
 ```
 
-### 2. Install All Dependencies
-Install dependencies for root, backend, and frontend with a single command:
-```bash
-npm run install:all
-```
+---
 
-### 3. Configure Backend Environment
-Copy the example environment file inside `backend/`:
-```bash
-cp backend/.env.example backend/.env
-```
-*(The default settings work immediately out-of-the-box with port `5001` and client `5173`).*
+### Step 2: Start Spring Boot Backend
+The backend runs by default in `dev` profile using in-memory H2 with zero database installation required!
 
-### 4. Run the Application
-Start both the Backend API and Frontend Dev Server concurrently:
 ```bash
-npm start
+cd backend
+mvn clean spring-boot:run
 ```
-*(Or use `npm run dev`)*
+*The backend starts at `http://localhost:8080`.*
+*(Optional) H2 Console is available at `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:fraudgraph_db`, user: `sa`, password: empty).*
 
-The services will start at:
-- **Frontend Web App:** [http://localhost:5173](http://localhost:5173)
-- **Backend REST API:** [http://localhost:5001/api](http://localhost:5001/api)
+#### Running with MySQL (Optional)
+To use local MySQL:
+1. Ensure MySQL is running on port 3306.
+2. Execute the DDL script:
+   ```bash
+   mysql -u root -p < src/main/resources/schema-mysql.sql
+   ```
+3. Run with the MySQL profile:
+   ```bash
+   mvn spring-boot:run -Dspring-boot.run.profiles=mysql
+   ```
 
 ---
 
-## ⚙️ Environment Configuration
+### Step 3: Start React Frontend
+In a separate terminal:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*The frontend dashboard will be live at `http://localhost:5173`.*
 
-| Variable | Default Value | Description |
-| :--- | :--- | :--- |
-| `PORT` | `5001` | HTTP Port for the Express backend |
-| `NODE_ENV` | `development` | Node environment (`development` / `production`) |
-| `MONGODB_URI` | `mongodb://127.0.0.1:27017/acxiomcrm` | MongoDB connection URI (fallback to In-Memory DB) |
-| `JWT_SECRET` | `acxiom_crm_jwt_secure_key_2026_production_grade` | Secret key used for signing JWT auth tokens |
-| `JWT_EXPIRES_IN` | `7d` | Token expiration duration |
-| `CLIENT_URL` | `http://localhost:5173` | Allowed CORS origin for the React frontend |
-| `LOCKOUT_TIME_MINUTES` | `15` | Duration of account lockout after repeated failures |
-| `MAX_FAILED_LOGIN_ATTEMPTS` | `5` | Maximum failed attempts allowed before lockout |
+---
+
+## 👤 Pre-Configured Demo Accounts
+
+For instant evaluation, 1-click login buttons are provided on the login page:
+
+| Role | Username | Password | Access Capabilities |
+|---|---|---|---|
+| **Senior Fraud Investigator** | `investigator` | `password123` | Full access to Stream, Case Resolutions, XAI Drawer, and Graph Explorer |
+| **Risk Operations Admin** | `admin` | `admin123` | Full system oversight, Simulator Workbench, and Audit History |
 
 ---
 
 ## 📡 REST API Reference
 
-### 🔐 Authentication (`/api/auth`)
-- `POST /api/auth/register` — Register a new account
-- `POST /api/auth/login` — Authenticate user and receive JWT (enforces lockout rules)
-- `GET /api/auth/me` — Retrieve active profile & verified role
-- `POST /api/auth/logout` — Terminate session & log audit event
+### Authentication (`/api/auth`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/login` | Authenticate with credentials and receive JWT |
+| `POST` | `/api/auth/register` | Register an investigator account |
+| `GET` | `/api/auth/me` | Retrieve active authenticated session |
 
-### 👤 Customers (`/api/customers`)
-- `GET /api/customers` — List customers with pagination, search, status filters
-- `POST /api/customers` — Create customer (enforces unique email & phone)
-- `GET /api/customers/:id` — Get customer details & activity history
-- `PUT /api/customers/:id` — Update customer information
-- `DELETE /api/customers/:id` — Remove customer (Admin & Manager only)
+### Transactions (`/api/transactions`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/transactions` | Score and ingest a transaction in real time |
+| `GET` | `/api/transactions` | Paginated recent transaction ledger |
+| `GET` | `/api/transactions/recent` | Top 50 streaming transactions |
+| `GET` | `/api/transactions/{ref}` | Get transaction details with XAI breakdown |
 
-### 🎯 Leads (`/api/leads`)
-- `GET /api/leads` — List leads with status/priority filtering
-- `POST /api/leads` — Capture new prospect lead
-- `GET /api/leads/:id` — Get lead details
-- `PUT /api/leads/:id` — Update lead status and details
-- `POST /api/leads/:id/convert` — **Convert qualified lead to Customer + Opportunity**
-- `DELETE /api/leads/:id` — Remove lead (Admin & Manager only)
+### Investigation Alerts (`/api/alerts`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/alerts` | Paginated investigation cases |
+| `GET` | `/api/alerts/prioritized` | Active queue prioritized by Risk + Uncertainty |
+| `GET` | `/api/alerts/{ref}` | Alert detail view |
+| `PATCH` | `/api/alerts/{ref}/resolve` | Resolve alert with investigator audit notes |
 
-### 💼 Opportunities (`/api/opportunities`)
-- `GET /api/opportunities` — List sales pipeline opportunities
-- `POST /api/opportunities` — Create opportunity (validates amount > 0 and close date)
-- `GET /api/opportunities/:id` — Get opportunity details
-- `PUT /api/opportunities/:id` — Update stage, probability, and deal value
-- `DELETE /api/opportunities/:id` — Delete opportunity (Admin & Manager only)
+### Graph & Analytics (`/api/graph`, `/api/analytics`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/graph/topology` | Returns graph nodes, edges, cycles, and mules |
+| `GET` | `/api/analytics/summary` | KPI executive metrics summary |
+| `GET` | `/api/analytics/drift-reports`| Recent concept drift detection events |
 
-### 📅 Follow-Ups (`/api/followups`)
-- `GET /api/followups` — List follow-ups (`?filter=today|upcoming|overdue`)
-- `POST /api/followups` — Schedule follow-up (validates date ≥ today)
-- `PATCH /api/followups/:id/complete` — Mark follow-up completed with notes
-- `DELETE /api/followups/:id` — Delete follow-up
-
-### 🛡️ Administration & Audit (`/api/users`, `/api/audit-logs`)
-- `GET /api/users` — List application users (Admin only)
-- `POST /api/users` — Create user with explicit role (Admin only)
-- `PUT /api/users/:id` — Update user profile or password (Admin only)
-- `PATCH /api/users/:id/status` — Toggle user active/inactive status (Admin only)
-- `POST /api/users/:id/unlock` — Release security lockout on user account (Admin only)
-- `GET /api/audit-logs` — Query append-only audit trail with module/user filters (Admin only)
-- `GET /api/dashboard` — Role-scoped analytics and Chart.js datasets
-- `GET /api/reports/*` — Pipeline forecasting and sales conversion reports
+### Simulator & Drift Lab (`/api/simulation`)
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/simulation/batch` | Ingest scenario (`MULE_ATTACK`, `VELOCITY_BURST`, `HIGH_AMOUNT_DRIFT`) |
+| `POST` | `/api/simulation/single` | Emit single realistic normal transaction |
+| `POST` | `/api/simulation/toggle` | Start/stop continuous background transaction stream |
+| `GET` | `/api/simulation/status` | Get background streaming status |
 
 ---
 
-## 📐 Business Rules & Validation
+## 🧪 ML Research & Synthetic Dataset
 
-1. **Email & Phone Uniqueness:** Customer records enforce strict email and phone uniqueness to eliminate duplicate data.
-2. **Opportunity Financials:** Active opportunity amounts must be strictly positive (`Amount > 0`), and probability must be within `0%` to `100%`.
-3. **Date Consistency:** Expected close dates for open opportunities and scheduled follow-up dates cannot be in the past.
-4. **Lead Conversion Flow:** When a lead is marked `Qualified`, the user can convert it. Conversion sets the lead status to `Converted`, links it to the newly created Customer ID and Opportunity ID, and logs a tamper-evident audit entry.
+A dedicated Python research suite is located in `/ml-research`:
+
+- `generate_synthetic_dataset.py`: Generates 5,000 synthetic financial transactions with log-normal spend, mule ring cycles, and temporal concept drift.
+- `train_adaptive_model.py`: Implements benchmark evaluation under extreme class imbalance, extracting graph centrality, calculating PR-AUC, and evaluating performance across drift boundaries.
+- `concept_drift_experiment.py`: Runs sliding window distribution shift tests tracking drift distance and trigger points.
+
+Run the research suite:
+```bash
+python3 ml-research/generate_synthetic_dataset.py
+python3 ml-research/train_adaptive_model.py
+python3 ml-research/concept_drift_experiment.py
+```
 
 ---
 
-## 🔒 Security & Audit Logging
+## 🛡️ Compliance & Ethical Safeguards
 
-- **Password Security:** Passwords hashed using `bcryptjs` with 10 salt rounds; plaintext passwords are never logged or returned.
-- **Account Lockout Policy:** Protects against brute-force attacks by locking accounts for 15 minutes after 5 consecutive failed attempts.
-- **Audit Trail:** Append-only log recording IP address, actor role, timestamp, action type, target entity, and payload snapshots.
+- **Synthetic Data Standard:** FraudGraph AI strictly uses synthetic and public mathematical distributions (PaySim-style log-normal amounts, pseudo-random account identifiers). **Zero real banking credentials or unauthorized financial records are used.**
+- **Explainability (XAI) Compliance:** Designed in compliance with regulatory Explainable AI standards (such as GDPR Article 22 Right to Explanation and US FCRA model auditability), ensuring that every blocked transaction has deterministic, human-auditable factor justifications.
 
 ---
 
 ## 📄 License
-
-This project is licensed under the **MIT License** — feel free to use, modify, and distribute for personal and commercial projects.
+This project is licensed under the [MIT License](LICENSE).

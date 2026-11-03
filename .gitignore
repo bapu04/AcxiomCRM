@@ -2,6 +2,18 @@
 node_modules/
 */node_modules/
 
+# Java / Maven Build Artifacts
+target/
+*/target/
+*.class
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
 # Production Build Artifacts
 dist/
 build/

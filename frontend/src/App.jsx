@@ -1,72 +1,124 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
-import ProtectedRoute from './components/ProtectedRoute';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
+import DashboardView from './pages/DashboardView';
+import LiveStreamView from './pages/LiveStreamView';
+import GraphVisualizerView from './pages/GraphVisualizerView';
+import InvestigationQueueView from './pages/InvestigationQueueView';
+import SimulatorWorkbenchView from './pages/SimulatorWorkbenchView';
+import LoginView from './pages/LoginView';
+import InvestigationModal from './components/InvestigationModal';
+import { analyticsAPI, simulationAPI } from './services/api';
 
-import Login from './pages/Login';
-import Register from './pages/Register';
-import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard';
-import Customers from './pages/Customers';
-import Leads from './pages/Leads';
-import Opportunities from './pages/Opportunities';
-import FollowUps from './pages/FollowUps';
-import Users from './pages/Users';
-import AuditLogs from './pages/AuditLogs';
-import Reports from './pages/Reports';
+export function App() {
+  const { isAuthenticated } = useAuth();
+  const queryParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const initialTab = (queryParams && queryParams.get('tab')) || 'dashboard';
+  const showModalParam = queryParams && queryParams.get('modal') === 'true';
 
-const AppLayout = () => {
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [driftDetected, setDriftDetected] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [inspectedTxn, setInspectedTxn] = useState(null);
+
+  useEffect(() => {
+    if (showModalParam && !inspectedTxn) {
+      setInspectedTxn({
+        txnReference: 'TXN-90241-BURST',
+        senderAccount: 'ACC-MULE-4412',
+        recipientAccount: 'ACC-EXIT-9019',
+        amount: 84950.00,
+        riskScore: 94.8,
+        uncertaintyScore: 0.285,
+        driftDeviation: 0.312,
+        status: 'BLOCKED',
+        xaiFactorsJson: JSON.stringify([
+          { factor: 'Rapid Transaction Burst (>5 txns/min)', impact: 38.5, direction: 'INCREASES_RISK' },
+          { factor: 'Money Mule Ring Circular Flow (Length 3)', impact: 31.2, direction: 'INCREASES_RISK' },
+          { factor: 'Cross-Border High-Risk Gateway Routing', impact: 18.0, direction: 'INCREASES_RISK' },
+          { factor: 'Off-Hours Velocity Anomaly (03:42 AM IST)', impact: 7.1, direction: 'INCREASES_RISK' }
+        ])
+      });
+    }
+  }, [showModalParam]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const checkSystemMetrics = async () => {
+      try {
+        const [sumRes, simRes] = await Promise.all([
+          analyticsAPI.getSummary(),
+          simulationAPI.getStatus(),
+        ]);
+        setDriftDetected(sumRes.data?.conceptDriftDetected || false);
+        setIsStreaming(simRes.data?.streamingActive || false);
+      } catch (err) {
+        // silent sync
+      }
+    };
+
+    checkSystemMetrics();
+    const interval = setInterval(checkSystemMetrics, 4000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return <LoginView />;
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
-      <Navbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto">
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/leads" element={<Leads />} />
-            <Route path="/opportunities" element={<Opportunities />} />
-            <Route path="/follow-ups" element={<FollowUps />} />
-            <Route path="/reports" element={<Reports />} />
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        driftDetected={driftDetected}
+        isStreaming={isStreaming}
+      />
 
-            {/* Admin Only Routes */}
-            <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
-              <Route path="/users" element={<Users />} />
-              <Route path="/audit-logs" element={<AuditLogs />} />
-            </Route>
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {activeTab === 'dashboard' && (
+          <DashboardView onSelectTransaction={(txn) => setInspectedTxn(txn)} />
+        )}
+        {activeTab === 'stream' && (
+          <LiveStreamView onSelectTransaction={(txn) => setInspectedTxn(txn)} />
+        )}
+        {activeTab === 'graph' && <GraphVisualizerView />}
+        {activeTab === 'investigation' && <InvestigationQueueView />}
+        {activeTab === 'simulator' && <SimulatorWorkbenchView />}
+      </main>
 
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </main>
-      </div>
+      {/* Drill-down modal for any transaction clicked in stream or dashboard */}
+      {inspectedTxn && (
+        <InvestigationModal
+          alert={{
+            alertReference: inspectedTxn.txnReference,
+            txnReference: inspectedTxn.txnReference,
+            senderAccount: inspectedTxn.senderAccount,
+            recipientAccount: inspectedTxn.recipientAccount,
+            amount: inspectedTxn.amount,
+            riskScore: inspectedTxn.riskScore,
+            priority: inspectedTxn.riskScore >= 75 ? 'CRITICAL' : inspectedTxn.riskScore >= 60 ? 'HIGH' : 'MEDIUM',
+            uncertaintyScore: inspectedTxn.uncertaintyScore,
+            driftDeviation: inspectedTxn.driftDeviation,
+            primaryReason: `Transaction scored at risk ${inspectedTxn.riskScore}/100 with uncertainty ${(inspectedTxn.uncertaintyScore * 100).toFixed(1)}%`,
+            xaiFactorsJson: inspectedTxn.xaiFactorsJson,
+            status: inspectedTxn.status === 'BLOCKED' ? 'OPEN' : 'DISMISSED',
+          }}
+          onClose={() => setInspectedTxn(null)}
+          onResolved={() => setInspectedTxn(null)}
+        />
+      )}
+
+      {/* Footer */}
+      <footer className="border-t border-slate-900 py-4 bg-slate-950/60 text-center text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>FinTech Fraud Detection — Adaptive Intelligence Under Concept Drift</span>
+          <span className="font-mono text-slate-600">Spring Boot 3 + MySQL + React + Recharts + scikit-learn</span>
+        </div>
+      </footer>
     </div>
   );
-};
-
-export const App = () => {
-  return (
-    <ThemeProvider>
-      <Router>
-        <AuthProvider>
-          <Routes>
-            {/* Public Landing & Auth Routes */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-
-            {/* Authenticated Layout */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/*" element={<AppLayout />} />
-            </Route>
-          </Routes>
-        </AuthProvider>
-      </Router>
-    </ThemeProvider>
-  );
-};
+}
 
 export default App;

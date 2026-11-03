@@ -1,73 +1,111 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {
+  ShieldAlert,
+  Activity,
+  Layers,
+  Network,
+  Cpu,
+  BarChart3,
+  LogOut,
+  Zap,
+  Radio,
+  AlertOctagon,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { ThemeToggle } from '../context/ThemeContext';
-import { LogOut, User as UserIcon } from 'lucide-react';
 
-export const Navbar = () => {
+export const Navbar = ({ activeTab, setActiveTab, driftDetected, isStreaming }) => {
   const { user, logout } = useAuth();
 
-  const getRoleBadgeColor = (role) => {
-    switch (role) {
-      case 'Admin':
-        return 'bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800';
-      case 'Manager':
-        return 'bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800';
-      default:
-        return 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
-    }
-  };
+  const tabs = [
+    { id: 'dashboard', label: 'Fraud Intelligence', icon: BarChart3 },
+    { id: 'stream', label: 'Live Detection Stream', icon: Activity },
+    { id: 'graph', label: 'FraudGraph Topology', icon: Network },
+    { id: 'investigation', label: 'Investigation Cases', icon: ShieldAlert },
+    { id: 'simulator', label: 'Attack & Drift Lab', icon: Cpu },
+  ];
 
   return (
-    <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-30 flex items-center justify-between px-6 transition-colors duration-200">
-      <div className="flex items-center gap-3">
-        <Link to="/dashboard" className="flex items-center gap-2 hover:opacity-90 transition">
-          <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-            A
-          </div>
-          <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Acxiom<span className="text-indigo-600 dark:text-indigo-400">CRM</span>
-          </span>
-        </Link>
-        <span className="hidden sm:inline-block text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-          Enterprise v1.0
-        </span>
-      </div>
-
-      <div className="flex items-center gap-3">
-        {/* Dark / Light Mode Toggle Button */}
-        <ThemeToggle />
-
-        {/* User Profile Pill */}
-        <div className="flex items-center gap-3 border-x border-slate-200 dark:border-slate-700/80 px-3">
-          <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 font-semibold border border-slate-200 dark:border-slate-700">
-            {user?.name ? user.name.charAt(0).toUpperCase() : <UserIcon className="h-4 w-4" />}
-          </div>
-          <div className="hidden md:flex flex-col text-left">
-            <span className="text-sm font-semibold text-slate-900 dark:text-white leading-tight">
-              {user?.name || 'User'}
-            </span>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span
-                className={`text-[11px] font-medium px-2 py-0.2 rounded border ${getRoleBadgeColor(
-                  user?.role
-                )}`}
-              >
-                {user?.role}
-              </span>
+    <header className="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              <ShieldAlert className="w-6 h-6 text-slate-950 stroke-[2.5]" />
             </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-base tracking-tight text-white">
+                  FinTech <span className="text-emerald-400">Fraud Detection</span>
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  v2.4
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-400 hidden sm:block">
+                Adaptive Financial Fraud Detection Under Concept Drift
+              </p>
+            </div>
+          </div>
+
+          {/* System Status Indicators */}
+          <div className="hidden lg:flex items-center gap-2">
+            {driftDetected && (
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/30 animate-pulse">
+                <AlertOctagon className="w-3.5 h-3.5" />
+                <span>Concept Drift Active</span>
+              </div>
+            )}
+
+            <div
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+                isStreaming
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                  : 'bg-slate-800/80 text-slate-400 border-slate-700/60'
+              }`}
+            >
+              <Radio className={`w-3.5 h-3.5 ${isStreaming ? 'animate-ping' : ''}`} />
+              <span>{isStreaming ? 'Live Stream Active' : 'Stream Paused'}</span>
+            </div>
+          </div>
+
+          {/* User Profile & Logout */}
+          <div className="flex items-center gap-3">
+            <div className="text-right hidden sm:block">
+              <div className="text-xs font-semibold text-slate-200">{user?.fullName || user?.username}</div>
+              <div className="text-[10px] font-mono text-emerald-400 uppercase">{user?.role?.replace('ROLE_', '')}</div>
+            </div>
+            <button
+              onClick={logout}
+              title="Sign Out"
+              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
-        {/* Logout Button */}
-        <button
-          onClick={logout}
-          title="Sign Out"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition border border-slate-200 dark:border-slate-700 hover:border-red-200 dark:hover:border-red-800"
-        >
-          <LogOut className="h-4 w-4" />
-          <span className="hidden sm:inline">Logout</span>
-        </button>
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-1 overflow-x-auto py-2 border-t border-slate-900 no-scrollbar">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                  isActive
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-400' : 'text-slate-500'}`} />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </header>
   );
